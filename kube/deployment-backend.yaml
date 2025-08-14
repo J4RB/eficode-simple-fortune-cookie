@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cookie-backend
+  labels: 
+    app: cookie-backend
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: cookie-backend
+  template:
+    metadata:
+      labels:
+        app: cookie-backend
+    spec:
+      containers:
+        - image: ghcr.io/j4rb/simple-fortune-cookie-backend:latest
+          name: cookie-backend
+
