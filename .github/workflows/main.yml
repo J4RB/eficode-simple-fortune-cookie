@@ -21,9 +21,9 @@ jobs:
         with:
           go-version: '1.19'
       - name: Build Backend
-        working-directory: ./backend
+        working-directory: ./eficode-simple-fortune-cookie/backend
         run: go build
       - name: Build Frontend
-        working-directory: ./frontend
+        working-directory: ./eficode-simple-fortune-cookie/frontend
         run: go build
       
