@@ -33,4 +33,3 @@ jobs:
       - name: Run tests
         working-directory: ./frontend
         run: go test
-      
