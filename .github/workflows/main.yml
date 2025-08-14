@@ -8,6 +8,8 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+
 env:
   docker_username: j4rb
   docker_password: ${{ secrets.GITHUB_TOKEN }}
@@ -106,4 +108,30 @@ jobs:
         run: kubectl --kubeconfig kubeconfig get nodes
       - name: Deploy
         run: kubectl --kubeconfig kubeconfig apply -f kube
-        
+      - name: Setup Docker Compose
+        run: docker compose up --build -d
+      - name: Verify Service Health (localhost:8080)
+        id: health_check
+        run: |
+          MAX_RETRIES=10  # Increased retries for service startup
+          RETRY_DELAY=5   # seconds
+          URL="http://localhost:8080"
+
+          echo "Attempting to curl $URL with retries..."
+          for i in $(seq 1 $MAX_RETRIES); do
+            echo "Attempt $i of $MAX_RETRIES..."
+            STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
+
+            if [ "$STATUS_CODE" -eq 200 ]; then
+              echo "Service at $URL is healthy (Status 200)."
+              echo "health_check_status=200" >> $GITHUB_OUTPUT
+              exit 0 # Exit the script successfully
+            else
+              echo "Service at $URL returned status $STATUS_CODE. Retrying in $RETRY_DELAY seconds..."
+              sleep $RETRY_DELAY
+            fi
+          done
+
+          echo "Error: Service at $URL did not return 200 after $MAX_RETRIES attempts."
+          echo "health_check_status=failed" >> $GITHUB_OUTPUT
+          exit 1 # Exit with a failure code to mark the step as failed
