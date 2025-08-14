@@ -104,6 +104,5 @@ jobs:
       - name: Verify Kubernetes access
         run: kubectl --kubeconfig kubeconfig get nodes
       - name: Deploy
-        working-directory: ./kube
-        run: kubectl --kubeconfig kubeconfig apply -f .
-
+        run: kubectl --kubeconfig kubeconfig apply -f kube
+        
