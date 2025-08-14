@@ -65,5 +65,32 @@ jobs:
           docker tag ghcr.io/$docker_username/simple-fortune-cookie-backend:${{ env.TAG }} ghcr.io/$docker_username/simple-fortune-cookie-backend:latest
           docker push ghcr.io/$docker_username/simple-fortune-cookie-backend:latest
 
+  Docker-Frontend:
+    runs-on: ubuntu-latest
+    needs: [Test]
+    permissions:
+      packages: write
+    steps:
+      - name: Clone down repository
+        uses: actions/checkout@v4
+      - name: echo username
+        run: echo ${{ secrets.DOCKERHUB_USERNAME }}
+      - name: Log in to GitHub registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: $docker_username
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set image tag
+        run: echo "TAG=${GITHUB_SHA}" >> $GITHUB_ENV
+      - name: Build Frontend Docker image
+        working-directory: ./frontend
+        run: docker build -t ghcr.io/$docker_username/simple-fortune-cookie-frontend:${{ env.TAG }} .
+      - name: Push frontend Docker image
+        run: docker push ghcr.io/$docker_username/simple-fortune-cookie-frontend:${{ env.TAG }}
+      - name: Push frontend latest
+        run: |
+          docker tag ghcr.io/$docker_username/simple-fortune-cookie-frontend:${{ env.TAG }} ghcr.io/$docker_username/simple-fortune-cookie-frontend:latest
+          docker push ghcr.io/$docker_username/simple-fortune-cookie-frontend:latest
 
       
