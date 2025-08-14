@@ -39,7 +39,7 @@ jobs:
     needs: [Test]
     steps:
       - name: Clone down repository
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
       - name: Log in to DockerHub
         uses: docker/login-action@v3
         with:
