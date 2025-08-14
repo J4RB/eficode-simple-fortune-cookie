@@ -57,13 +57,13 @@ jobs:
         run: echo "TAG=${GITHUB_SHA}" >> $GITHUB_ENV
       - name: Build Backend Docker image
         working-directory: ./backend
-        run: docker build -t $docker_username/simple-fortune-cookie-backend:${{ env.TAG }} .
+        run: docker build -t ghcr.io/$docker_username/simple-fortune-cookie-backend:${{ env.TAG }} .
       - name: Push Backend Docker image
-        run: docker push $docker_username/simple-fortune-cookie-backend:${{ env.TAG }}
+        run: docker push ghcr.io/$docker_username/simple-fortune-cookie-backend:${{ env.TAG }}
       - name: Push Backend latest
         run: |
-          docker tag $docker_username/simple-fortune-cookie-backend:${{ env.TAG }} $docker_username/simple-fortune-cookie-backend:latest
-          docker push $docker_username/simple-fortune-cookie-backend:latest
+          docker tag ghcr.io/$docker_username/simple-fortune-cookie-backend:${{ env.TAG }} ghcr.io/$docker_username/simple-fortune-cookie-backend:latest
+          docker push ghcr.io/$docker_username/simple-fortune-cookie-backend:latest
 
 
       
