@@ -22,6 +22,8 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: '1.19'
+      - name: Set safe directory
+        run: git config --global --add safe.directory /__w/eficode-simple-fortune-cookie/eficode-simple-fortune-cookie
       - name: Get git status
         run: git status
       - name: Build Backend
