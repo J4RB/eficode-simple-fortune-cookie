@@ -17,4 +17,6 @@ spec:
       containers:
         - image: ghcr.io/j4rb/simple-fortune-cookie-backend:latest
           name: cookie-backend
-
+          env:
+            - name: REDIS_DNS
+              value: cookie-database-service
