@@ -33,3 +33,29 @@ jobs:
       - name: Run tests
         working-directory: ./frontend
         run: go test
+
+  Docker-Backend:
+    runs-on: ubuntu-latest
+    needs: [Test]
+    steps:
+      - name: Clone down repository
+      - uses: actions/checkout@v4
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set image tag
+        run: echo "TAG=${GITHUB_SHA}" >> $GITHUB_ENV
+      - name: Build Backend Docker image
+        working-directory: ./backend
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/simple-fortune-cookie-backend:${{ env.TAG }} .
+      - name: Push Backend Docker image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/simple-fortune-cookie-backend:${{ env.TAG }}
+      - name: Push Backend latest
+        run: |
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/simple-fortune-cookie-backend:${{ env.TAG }} ${{ secrets.DOCKERHUB_USERNAME }}/simple-fortune-cookie-backend:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/simple-fortune-cookie-backend:latest
+
+      
+
