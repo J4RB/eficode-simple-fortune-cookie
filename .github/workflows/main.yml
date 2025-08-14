@@ -96,7 +96,7 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest
     needs: [Docker-Backend, Docker-Frontend]
-    if: github.ref == "refs/heads/main"
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Clone down repository
         uses: actions/checkout@v4
