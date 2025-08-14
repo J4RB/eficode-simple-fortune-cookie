@@ -1,0 +1,35 @@
+name: CI
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone down repository
+        uses: actions/checkout@v4
+      - name: Set safe directory
+        run: git config --global --add safe.directory /__w/eficode-simple-fortune-cookie/eficode-simple-fortune-cookie
+      - name: Build Backend
+        working-directory: ./backend
+        run: go build
+      - name: Build Frontend
+        working-directory: ./frontend
+        run: go build
+
+  Test:
+    runs-on: ubuntu-latest
+    needs: [Build]
+    steps:
+      - name: Clone down repository
+        uses: actions/checkout@v4
+      - name: Run tests
+        working-directory: ./frontend
+        run: go test
