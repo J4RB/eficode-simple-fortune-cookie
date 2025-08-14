@@ -103,15 +103,7 @@ jobs:
         run: echo "${{ secrets.KUBECONFIG }}" | base64 -d > kubeconfig        
       - name: Verify Kubernetes access
         run: kubectl --kubeconfig kubeconfig get nodes
-      - name: Deploy Backend
-        run: |
-          kubectl --kubeconfig kubeconfig set image deployment/simple-fortune-cookie-backend \
-            simple-fortune-cookie-backend=ghcr.io/${{ env.docker_username }}/simple-fortune-cookie-backend:${GITHUB_SHA} --record
-          kubectl --kubeconfig kubeconfig rollout status deployment/simple-fortune-cookie-backend
-      
-      - name: Deploy Frontend
-        run: |
-          kubectl --kubeconfig kubeconfig set image deployment/simple-fortune-cookie-frontend \
-            simple-fortune-cookie-frontend=ghcr.io/${{ env.docker_username }}/simple-fortune-cookie-frontend:${GITHUB_SHA} --record
-          kubectl --kubeconfig kubeconfig rollout status deployment/simple-fortune-cookie-frontend
+      - name: Deploy
+        working-directory: ./kube
+        run: kubectl --kubeconfig kubeconfig apply -f .
 
