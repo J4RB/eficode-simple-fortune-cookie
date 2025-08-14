@@ -1,0 +1,25 @@
+name: CI
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    container: gradle:6-jdk11
+    steps:
+      - name: Clone down repository
+        uses: actions/checkout@v4       
+      - name: Build Backend
+        working-directory: ./backend
+        run: go build
+      - name: Build Frontend
+        working-directory: ./frontend
+        run: go build
+      
