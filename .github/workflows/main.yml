@@ -8,6 +8,8 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+  
 env:
   docker_username: j4rb
   docker_password: ${{ secrets.GITHUB_TOKEN }}
