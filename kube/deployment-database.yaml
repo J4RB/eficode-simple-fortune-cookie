@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cookie-database
+  labels: 
+    app: cookie-database
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: cookie-database
+  template:
+    metadata:
+      labels:
+        app: cookie-database
+    spec:
+      containers:
+        - image: redis:latest
+          name: cookie-database
+
