@@ -9,7 +9,7 @@ on:
     branches:
       - main
   workflow_dispatch:
-  
+
 env:
   docker_username: j4rb
   docker_password: ${{ secrets.GITHUB_TOKEN }}
@@ -108,6 +108,7 @@ jobs:
         run: kubectl --kubeconfig kubeconfig get nodes
       - name: Deploy
         run: kubectl --kubeconfig kubeconfig apply -f kube
-      - name: Heartbeat
-        run: curl cookie-frontend-service
-        
+      - name: Setup Compose
+        run: docker compose up --build -d
+      - name: check heartbeat
+        run: curl localhost:8000
